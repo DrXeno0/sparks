@@ -1,5 +1,6 @@
 // main.dart
 import 'package:flutter/material.dart';
+import 'package:sparks/nav_systeme/my_custome_nav.dart';
 import 'package:sparks/ui/screens/history_page.dart';
 import 'package:sparks/ui/screens/home_page.dart';
 import 'package:sparks/ui/screens/page.dart';
@@ -28,6 +29,9 @@ void main()  async {
     // fullScreen: false,
     // title: 'Your App Title',
   );
+
+
+;
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
@@ -65,23 +69,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   /// This method returns the widget for the current route.
-  Widget getRoutes(String route) {
-    switch (route) {
-      case "/home":
-        return HomePage();
-      case "/supervisor":
-        return SuperVisorPage();
-      case "/stats":
-        return StatsPage();
-      case "/history":
-        return HistoryPage();
-      default:
-        return HomePage();
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
+
     // Whenever a nav item is clicked, we trigger setState so that PageHost rebuilds.
     return
 
@@ -108,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               // PageHost uses the current route from NavRoute
               PageHost(
-                pageHosted: getRoutes(NavRoute.getRoute()),
+
               ),
             ],
           ),
@@ -116,3 +108,5 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 }
+
+

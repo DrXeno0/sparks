@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:sparks/ui/components/search_bar.dart';
 
 class HistoryPage extends StatefulWidget{
   @override
@@ -9,6 +10,10 @@ class _HistoryPageState  extends State<HistoryPage>{
   @override
   Widget build(BuildContext context) {
     return Center(
-        child : Text("History page"));
+        child :
+            MySearchBar(),
+
+
+        );
   }
 }

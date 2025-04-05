@@ -1,23 +1,27 @@
-// nav_host.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sparks/ui/screens/custom_title_bar.dart';
-
-import 'package:sparks/ui/theme.dart';
+import 'package:sparks/nav_systeme/my_custome_nav.dart';
+import 'package:sparks/ui/screens/history_page.dart';
+import 'package:sparks/ui/screens/home_page.dart';
+import 'package:sparks/ui/screens/stats_page.dart';
+import 'package:sparks/ui/screens/supervisor_page.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:sparks/ui/theme.dart';
 
+
+// Callback for route changes (if needed in parent)
 typedef RouteChangedCallback = void Function(String newRoute);
 
 class NavHost extends StatefulWidget {
   final RouteChangedCallback onRouteChanged;
 
   const NavHost({Key? key, required this.onRouteChanged}) : super(key: key);
+
   @override
   State<NavHost> createState() => _NavHostState();
 }
 
 class _NavHostState extends State<NavHost> {
-  // Determine responsive width.
   double responsiveNavWidth(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return screenWidth > 1024 ? 345 : 100;
@@ -27,68 +31,71 @@ class _NavHostState extends State<NavHost> {
   Widget build(BuildContext context) {
     final navWidth = responsiveNavWidth(context);
     return GestureDetector(
-      onPanStart: (details) => windowManager.startDragging() ,
+      excludeFromSemantics: true,
+      onPanStart: (details) => windowManager.startDragging(),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
         width: navWidth,
         child: Stack(
           children: [
-            // Center the navigation links regardless of the logo.
+            // Center navigation links
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    NavLinkElement(
-                      iconPath: "assets/icons/Home.svg",
-                      label: "Home",
-                      route: "/home",
-                      isSelected: NavRoute.getRoute() == "/home",
-                      onClick: () {
-                        NavRoute.setRoute("/home");
-                        widget.onRouteChanged("/home");
-                      },
-                    ),
-                    const SizedBox(height: 27),
-                    NavLinkElement(
-                      iconPath: "assets/icons/Date.svg",
-                      label: "SuperVisor",
-                      route: "/supervisor",
-                      isSelected: NavRoute.getRoute() == "/supervisor",
-                      onClick: () {
-                        NavRoute.setRoute("/supervisor");
-                        widget.onRouteChanged("/supervisor");
-                      },
-                    ),
-                    const SizedBox(height: 27),
-                    NavLinkElement(
-                      iconPath: "assets/icons/curve.svg",
-                      label: "Stats",
-                      route: "/stats",
-                      isSelected: NavRoute.getRoute() == "/stats",
-                      onClick: () {
-                        NavRoute.setRoute("/stats");
-                        widget.onRouteChanged("/stats");
-                      },
-                    ),
-                    const SizedBox(height: 27),
-                    NavLinkElement(
-                      iconPath: "assets/icons/history.svg",
-                      label: "History",
-                      route: "/history",
-                      isSelected: NavRoute.getRoute() == "/history",
-                      onClick: () {
-                        NavRoute.setRoute("/history");
-                        widget.onRouteChanged("/history");
-                      },
-                    ),
-                  ],
+                child: ValueListenableBuilder<String>(
+                  valueListenable: RouteController.currentRouteName,
+                  builder: (context, currentRoute, _) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        NavLinkElement(
+                          iconPath: "assets/icons/Home.svg",
+                          label: "Home",
+                          isSelected: currentRoute == "home",
+                          onClick: () {
+                            RouteController.goTo(HomePage(), "home");
+                            widget.onRouteChanged("home");
+                          },
+                        ),
+                        const SizedBox(height: 27),
+                        NavLinkElement(
+                          iconPath: "assets/icons/Date.svg",
+                          label: "SuperVisor",
+                          isSelected: currentRoute == "supervisor",
+                          onClick: () {
+                            // Replace with your Supervisor page widget.
+                            RouteController.goTo(SuperVisorPage(), "supervisor");
+                            widget.onRouteChanged("supervisor");
+                          },
+                        ),
+                        const SizedBox(height: 27),
+                        NavLinkElement(
+                          iconPath: "assets/icons/curve.svg",
+                          label: "Stats",
+                          isSelected: currentRoute == "stats",
+                          onClick: () {
+                            RouteController.goTo(StatsPage(), "stats");
+                            widget.onRouteChanged("stats");
+                          },
+                        ),
+                        const SizedBox(height: 27),
+                        NavLinkElement(
+                          iconPath: "assets/icons/history.svg",
+                          label: "History",
+                          isSelected: currentRoute == "history",
+                          onClick: () {
+                            RouteController.goTo(HistoryPage(), "history");
+                            widget.onRouteChanged("history");
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
-            // Position the logo at the top center (only for expanded nav).
+            // Optional logo at top center for wider nav.
             if (navWidth > 150 && MediaQuery.of(context).size.height > 545)
               Positioned(
                 top: 20,
@@ -101,7 +108,6 @@ class _NavHostState extends State<NavHost> {
                   ),
                 ),
               ),
-
           ],
         ),
       ),
@@ -112,7 +118,6 @@ class _NavHostState extends State<NavHost> {
 class NavLinkElement extends StatelessWidget {
   final String iconPath;
   final String label;
-  final String route;
   final bool isSelected;
   final VoidCallback onClick;
 
@@ -120,14 +125,13 @@ class NavLinkElement extends StatelessWidget {
     Key? key,
     required this.iconPath,
     required this.label,
-    required this.route,
     required this.isSelected,
     required this.onClick,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Use the screen width to decide if the label should be shown.
+    // Determine if label should be shown based on screen width.
     final navWidth = MediaQuery.of(context).size.width > 1024 ? 345 : 150;
     final showLabel = navWidth > 150;
 
