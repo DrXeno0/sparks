@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sparks/ui/screens/home_page.dart';
+import 'package:sparks/view/screens/home_page.dart';
 
 
 class RouteController {

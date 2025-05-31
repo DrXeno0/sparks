@@ -1,42 +1,32 @@
-// main.dart
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:sparks/nav_systeme/my_custome_nav.dart';
-import 'package:sparks/ui/screens/history_page.dart';
-import 'package:sparks/ui/screens/home_page.dart';
-import 'package:sparks/ui/screens/page.dart';
-import 'package:sparks/ui/screens/stats_page.dart';
-import 'package:sparks/ui/screens/supervisor_page.dart';
-import 'package:sparks/ui/screens/nav_host.dart';
-import 'package:sparks/ui/theme.dart';
+import 'package:sparks/repository/database_repository.dart';
+import 'package:sparks/view/screens/nav_host.dart';
+import 'package:sparks/view/screens/page.dart';
+import 'package:sparks/view/screens/splash_screen.dart';
+import 'package:sparks/view/theme.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:sparks/ui/screens/custom_title_bar.dart';
-// NavRoute static class
 
-void main()  async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
+  DatabaseRepository().init();
 
-  WindowOptions windowOptions =  const  WindowOptions(
-    minimumSize: Size(1024, 720),
+  if (Platform.isWindows) {
+    await windowManager.ensureInitialized();
 
-    // You can also set other options, e.g.,
-    // size: Size(800, 600),  // Initial size
-    // center: true,       // Center the window on the screen
-    // backgroundColor: Colors.transparent,
-    skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.hidden,
-    // alwaysOnTop: false,
-    // fullScreen: false,
-    // title: 'Your App Title',
-  );
+    WindowOptions windowOptions = const WindowOptions(
+      minimumSize: Size(1024, 720),
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.hidden,
+    );
 
-
-;
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-  });
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  }
 
   runApp(const MyApp());
 }
@@ -50,10 +40,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: "Sparks"),
     );
   }
 }
@@ -68,22 +58,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  /// This method returns the widget for the current route.
+  Widget screen = SplashScreen();
 
+  void switchScreen() {
+    setState(() {
+      screen = _ScreenHost();
+    });
+  }
 
-  @override
-  Widget build(BuildContext context) {
-
-    // Whenever a nav item is clicked, we trigger setState so that PageHost rebuilds.
-    return
-
-       Container(
+  Widget _ScreenHost() {
+    return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [WHITE90, WHITE60],
-            stops: const [0.75, 1.0],
-            begin: const Alignment(0.5, 0),
-            end: const Alignment(0.5, 1),
+            colors: [Colors.white, white90],
+            stops: const [0, 1],
+            begin: const Alignment(0, 0),
+            end: const Alignment(1, 1),
           ),
         ),
         child: Padding(
@@ -91,22 +81,19 @@ class _MyHomePageState extends State<MyHomePage> {
               const EdgeInsets.only(left: 0.0, right: 13, top: 13, bottom: 13),
           child: Row(
             children: [
-
-              // Pass a callback to NavHost so it can notify when a route changes.
-              NavHost(
-                onRouteChanged: (String route) {
-                  setState(() {}); // Rebuild to update PageHost
-                },
-              ),
-              // PageHost uses the current route from NavRoute
-              PageHost(
-
-              ),
+              NavHost(),
+              PageHost(),
             ],
           ),
+        ));
+  }
 
-    ));
+  @override
+  Widget build(BuildContext context) {
+    Timer(Duration(seconds: 3), () {
+      switchScreen();
+    });
+
+    return screen;
   }
 }
-
-
