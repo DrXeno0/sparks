@@ -9,8 +9,8 @@ class EmailHelper {
     String? subject,
     String? body,
   }) async {
-    String username = 'yahya.elhilaly00@gmail.com';
-    String password = 'orzk juyo bsqs lxcc';
+    String username = 'email';
+    String password = 'password';
 
     final smtpServer = gmail(username, password);
 
