@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sparks/model/intern.dart';
-import 'package:sparks/nav_systeme/my_custome_nav.dart';
+import 'package:sparks/nav_system/my_custome_nav.dart';
 import 'package:sparks/repository/database_repository.dart';
 import 'package:sparks/utils/confirmation_helper.dart' as ConfirmationHelper;
 import 'package:sparks/utils/email_helper.dart';

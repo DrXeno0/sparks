@@ -1,12 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-
-import 'package:sparks/model/gender.dart';           // enum + assetPath()
-import 'package:sparks/model/profile_card_model.dart';
-
-import 'package:sparks/nav_systeme/my_custome_nav.dart';
+import 'package:sparks/model/gender.dart'; // enum + assetPath()
+import 'package:sparks/model/profile_card_model.dart';import 'package:sparks/nav_system/my_custome_nav.dart';
 import 'package:sparks/view/screens/supervisor_profile_page.dart';
 
 class SupervisorCard extends StatefulWidget {
@@ -23,7 +20,8 @@ class _SupervisorCardState extends State<SupervisorCard> {
 
   String _getInitials(String name) {
     final parts = name.split(' ');
-    return (parts.length >= 2 ? parts[0][0] + parts[1][0] : name[0]).toUpperCase();
+    return (parts.length >= 2 ? parts[0][0] + parts[1][0] : name[0])
+        .toUpperCase();
   }
 
   Color _generateRandomColor(String seed) {
@@ -90,7 +88,8 @@ class _SupervisorCardState extends State<SupervisorCard> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                    image: AssetImage(widget.supervisor.imageUrl!),
+                                    image:
+                                        AssetImage(widget.supervisor.imageUrl!),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -99,7 +98,7 @@ class _SupervisorCardState extends State<SupervisorCard> {
                             return CircleAvatar(
                               radius: avatarSize / 2,
                               backgroundColor:
-                              _generateRandomColor(widget.supervisor.name),
+                                  _generateRandomColor(widget.supervisor.name),
                               child: Text(
                                 _getInitials(widget.supervisor.name),
                                 style: TextStyle(
@@ -163,7 +162,8 @@ class _SupervisorCardState extends State<SupervisorCard> {
                   IconButton(
                     onPressed: () {},
                     padding: EdgeInsets.zero,
-                    icon: SvgPicture.asset('assets/icons/icon=edit.svg', width: 40),
+                    icon: SvgPicture.asset('assets/icons/icon=edit.svg',
+                        width: 40),
                   ),
                   SvgPicture.asset(
                     widget.supervisor.gender.assetPath(), // enum => icon

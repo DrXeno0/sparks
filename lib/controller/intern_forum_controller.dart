@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sparks/controller/form_validation_controller.dart';
 import 'package:sparks/model/intern.dart';
-import 'package:sparks/nav_systeme/my_custome_nav.dart';
+import 'package:sparks/nav_system/my_custome_nav.dart';
 import 'package:sparks/repository/database_repository.dart';
+import 'package:sparks/utils/PdfGenerator.dart';
 import 'package:sparks/utils/email_helper.dart';
+import 'package:sparks/utils/notification_helper.dart';
 import 'package:sparks/view/screens/home_page.dart';
 
 class InternForumController extends ForumValidationController {
@@ -98,18 +100,59 @@ class InternForumController extends ForumValidationController {
   }
 
   void acceptInternEmail(BuildContext context, Intern intern) {
-    EmailHelper.sendEmail(
-        toEmail: '${intern.email}',
-        subject: 'you have been accepted as an intern in CNRST',
-        body: 'hello, ${intern.name}this is the body of the email');
+    try {
+      EmailHelper.sendEmail(
+          toEmail: '${intern.email}',
+          subject: 'you have been accepted as an intern in CNRST',
+          body: 'hello, ${intern.name}this is the body of the email');
+    } on Exception catch (e) {
+      final snackBar = SnackBar(
+        content: Text('Error sending email: $e'),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw Exception('Error sending email: $e');
+    }
+  }
+
+  void rejectInternEmail(BuildContext context, String name, String email) {
+    try {
+      EmailHelper.sendEmail(
+          toEmail: '${email}',
+          subject: 'you have been rejected as an intern in CNRST',
+          body:
+              '''bonjour ${name},\n\nSuite à votre demande  de stage déposée au CNRST,  nous sommes au regret de vous informer que nous ne pouvons y donner une suite favorable.\nToutefois, ce refus ne remet  pas en cause vos qualités personnelles et votre parcours universitaire. Nous vous souhaitons une bonne continuation.\n\ncordialement,\nl'équipe CNRST
+            ''');
+      RouteController.goTo(HomePage(), "home");
+    } on Exception catch (e) {
+      final snackBar = SnackBar(
+        content: Text('Error sending email: $e'),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      throw Exception('Error sending email: $e');
+    }
   }
 
   void addIntern(BuildContext context, Intern intern) {
-    if (_validateIntern(context, intern)) {
-      _databaseRepository.insertIntern(intern);
-      acceptInternEmail(context, intern);
-      RouteController.goBack();
-      RouteController.goTo(HomePage(), "home");
+    try {
+      if (_validateIntern(context, intern)) {
+        acceptInternEmail(context, intern);
+        _databaseRepository.insertIntern(intern);
+        NotificationHelper().notify(
+            title: 'Intern added',
+            body: '${intern.name} is added successfully');
+        DocumentGenerator().generateAndPrintPDF(intern);
+        RouteController.goBack();
+        RouteController.goTo(HomePage(), "home");
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error adding intern: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 }

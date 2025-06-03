@@ -27,7 +27,36 @@ class _AddSupervisorPageState extends State<AddSupervisorPage> {
   String? _division;
   String? _department;
 
-/* ── helpers ─────────────────────────────────────────────── */
+  final Map<String, String?> _errorMessage = {
+    "full_name": null,
+    "email": null,
+    "phone": null,
+    "address": null,
+    "id": null,
+  };
+
+  bool _checkForEmptyFields() {
+    final Map<String, String?> _controllerstate = {
+      "full_name": _nameC.text,
+      "email": _mailC.text,
+      "phone": _phoneC.text,
+      "address": _addrC.text,
+      "id": _idC.text,
+    };
+    var size = _controllerstate.length;
+    for (var key in _controllerstate.keys) {
+      if (_controllerstate[key] == null ||
+          _controllerstate[key]!.isEmpty ||
+          _controllerstate[key] == "") {
+        setState(() {
+          _errorMessage[key] = "This field is required";
+        });
+        size--;
+      }
+    }
+    return size == _controllerstate.length;
+  }
+
   Widget _profileImage(double size) => Container(
         width: size,
         height: size,

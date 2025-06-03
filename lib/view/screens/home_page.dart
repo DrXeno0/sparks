@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sparks/model/intern.dart';
-import 'package:sparks/nav_systeme/my_custome_nav.dart';
+import 'package:sparks/nav_system/my_custome_nav.dart';
 import 'package:sparks/repository/database_repository.dart';
+import 'package:sparks/utils/PdfGenerator.dart';
 import 'package:sparks/view/components/icon_button.dart';
 import 'package:sparks/view/components/my_custom_button.dart';
 import 'package:sparks/view/components/profile_card.dart';
@@ -55,8 +56,11 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Expanded(child: components.MySearchBar()),
                         const SizedBox(width: 25),
-                        const MyIconButton(
+                        MyIconButton(
                           iconAsset: 'assets/icons/icon=filter.svg',
+                          onPressed: () {
+                            DocumentGenerator().generateAndPrintPDF(items![0]);
+                          },
                         ),
                         const SizedBox(width: 25),
                         MyButton(

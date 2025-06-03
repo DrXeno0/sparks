@@ -35,6 +35,9 @@ dependencies:
 
   url_launcher: ^6.3.1
   mailer: ^6.4.1
+  flutter_local_notifications: ^19.2.1
+  pdf: ^3.11.3
+  printing: ^5.14.2
 
 dev_dependencies:
   flutter_test:
@@ -44,6 +47,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   isar_generator: ^3.1.0+1
   build_runner: ^2.4.13
+  flutter_local_notifications: ^19.2.1
 
 flutter:
 
@@ -56,3 +60,4 @@ flutter:
     - assets/icons/
     - assets/animation/
     - assets/sounds/splash_sound.mp3
+    - assets/fonts/NotoSans-Regular.ttf

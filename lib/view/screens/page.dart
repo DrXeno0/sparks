@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sparks/nav_systeme/my_custome_nav.dart';
+import 'package:sparks/nav_system/my_custome_nav.dart';
 import 'package:sparks/view/screens/custom_title_bar.dart';
 import 'package:window_manager/window_manager.dart';
-
 
 class PageHost extends StatelessWidget {
   const PageHost({super.key});
@@ -27,7 +25,6 @@ class PageHost extends StatelessWidget {
         ),
         child: Column(
           children: [
-
             ValueListenableBuilder<String>(
               valueListenable: RouteController.currentRouteName,
               builder: (context, currentRoute, _) {
@@ -37,19 +34,17 @@ class PageHost extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ["profile", "supervisor_profile", "add_intern"].contains(currentRoute)
+                      ["profile", "supervisor_profile", "add_intern"]
+                              .contains(currentRoute)
                           ? IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-
-                          RouteController.goBack();
-
-                        },
-                        icon: SvgPicture.asset(
-                          "assets/icons/back.svg",
-
-                        ),
-                      )
+                              padding: EdgeInsets.zero,
+                              onPressed: () {
+                                RouteController.goBack();
+                              },
+                              icon: SvgPicture.asset(
+                                "assets/icons/back.svg",
+                              ),
+                            )
                           : const SizedBox(width: 10),
                       CustomTitleBar(),
                     ],
@@ -57,11 +52,9 @@ class PageHost extends StatelessWidget {
                 );
               },
             ),
-
             Expanded(
               child: Padding(
-                padding:
-                const EdgeInsets.only(left: 21, top: 21, right: 21),
+                padding: const EdgeInsets.only(left: 21, top: 21, right: 21),
                 child: ValueListenableBuilder<Widget>(
                   valueListenable: RouteController.currentPage,
                   builder: (context, page, _) {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sparks/repository/database_repository.dart';
 import 'package:sparks/view/screens/nav_host.dart';
 import 'package:sparks/view/screens/page.dart';
@@ -9,12 +10,21 @@ import 'package:sparks/view/screens/splash_screen.dart';
 import 'package:sparks/view/theme.dart';
 import 'package:window_manager/window_manager.dart';
 
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+const WindowsInitializationSettings initializationSettingsWindows =
+    WindowsInitializationSettings(
+        appName: 'sparks',
+        appUserModelId: 'nocturnal.sparks',
+        guid: 'a6a14840-4e3d-438a-b762-1db02dc2b189');
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   DatabaseRepository().init();
-
   if (Platform.isWindows) {
     await windowManager.ensureInitialized();
+    const InitializationSettings initializationSettings =
+        InitializationSettings(windows: initializationSettingsWindows);
 
     WindowOptions windowOptions = const WindowOptions(
       minimumSize: Size(1024, 720),
@@ -26,9 +36,23 @@ void main() async {
       await windowManager.show();
       await windowManager.focus();
     });
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      // This callback is for when a user taps a notification.
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+    );
   }
 
   runApp(const MyApp());
+}
+
+void onDidReceiveNotificationResponse(
+    NotificationResponse notificationResponse) async {
+  final String? payload = notificationResponse.payload;
+  if (notificationResponse.payload != null) {
+    debugPrint('notification payload: $payload');
+  }
 }
 
 class MyApp extends StatelessWidget {

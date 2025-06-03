@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sparks/model/gender.dart'; // ⬅️ enum + assetPath
 import 'package:sparks/model/intern.dart';
-import 'package:sparks/nav_systeme/my_custome_nav.dart';
+import 'package:sparks/nav_system/my_custome_nav.dart';
 import 'package:sparks/view/screens/profile_page.dart';
 
 class ProfileCard extends StatefulWidget {

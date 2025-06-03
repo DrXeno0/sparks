@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sparks/nav_systeme/my_custome_nav.dart';
+import 'package:sparks/nav_system/my_custome_nav.dart';
 import 'package:sparks/view/screens/history_page.dart';
 import 'package:sparks/view/screens/home_page.dart';
 import 'package:sparks/view/screens/stats_page.dart';
 import 'package:sparks/view/screens/supervisor_page.dart';
-import 'package:window_manager/window_manager.dart';
 import 'package:sparks/view/theme.dart';
-
+import 'package:window_manager/window_manager.dart';
 
 typedef RouteChangedCallback = void Function(String newRoute);
 
 class NavHost extends StatefulWidget {
-
-
   const NavHost({super.key});
 
   @override
@@ -53,7 +50,6 @@ class _NavHostState extends State<NavHost> {
                           isSelected: currentRoute == "home",
                           onClick: () {
                             RouteController.goTo(HomePage(), "home");
-
                           },
                         ),
                         const SizedBox(height: 27),
@@ -62,9 +58,8 @@ class _NavHostState extends State<NavHost> {
                           label: "SuperVisor",
                           isSelected: currentRoute == "supervisor",
                           onClick: () {
-
-                            RouteController.goTo(SuperVisorPage(), "supervisor");
-
+                            RouteController.goTo(
+                                SuperVisorPage(), "supervisor");
                           },
                         ),
                         const SizedBox(height: 27),
@@ -74,7 +69,6 @@ class _NavHostState extends State<NavHost> {
                           isSelected: currentRoute == "stats",
                           onClick: () {
                             RouteController.goTo(StatsPage(), "stats");
-
                           },
                         ),
                         const SizedBox(height: 27),
@@ -84,7 +78,6 @@ class _NavHostState extends State<NavHost> {
                           isSelected: currentRoute == "history",
                           onClick: () {
                             RouteController.goTo(HistoryPage(), "history");
-
                           },
                         ),
                       ],
@@ -93,21 +86,18 @@ class _NavHostState extends State<NavHost> {
                 ),
               ),
             ),
-
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: SvgPicture.asset(
-                    'assets/images/logo.svg',
-                    width: 75,
-                    color: Colors.cyan,
-
-
-                  ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/images/logo.svg',
+                  width: 75,
+                  color: Colors.cyan,
                 ),
               ),
+            ),
           ],
         ),
       ),

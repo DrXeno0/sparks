@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sparks/model/gender.dart';
-import 'package:sparks/nav_systeme/my_custome_nav.dart';
+import 'package:sparks/model/profile_card_model.dart';
+import 'package:sparks/nav_system/my_custome_nav.dart';
 import 'package:sparks/view/components/my_custom_button.dart';
 import 'package:sparks/view/components/my_custom_dropdown.dart';
-import 'package:sparks/model/profile_card_model.dart';
 import 'package:sparks/view/components/supervisor_card.dart';
 import 'package:sparks/view/screens/add_supervisor_page.dart';
 
@@ -53,7 +53,6 @@ class _SuperVisorPageState extends State<SuperVisorPage> {
         padding: EdgeInsets.zero,
         color: Colors.white,
         child: Column(
-
           children: [
             // Filter + Add Supervisor
             Row(
@@ -63,17 +62,15 @@ class _SuperVisorPageState extends State<SuperVisorPage> {
                   title: 'Select Division',
                   items: ['All', 'Engineering', 'HR', 'Design'],
                   width: 250,
-
                 ),
                 MyButton(
-                  text: 'Add Supervisor',
-                  iconAsset: 'assets/icons/icon=add.svg',
-                  width: 200,
-                  onPressed: () {
-                    RouteController.goTo(const AddSupervisorPage(), 'addSupervisor');
-                  }
-
-                ),
+                    text: 'Add Supervisor',
+                    iconAsset: 'assets/icons/icon=add.svg',
+                    width: 200,
+                    onPressed: () {
+                      RouteController.goTo(
+                          const AddSupervisorPage(), 'addSupervisor');
+                    }),
               ],
             ),
             const SizedBox(height: 20),

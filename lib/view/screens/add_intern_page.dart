@@ -38,7 +38,7 @@ class _AddInternPageState extends State<AddInternPage> {
   String? _department;
   bool _insurance = false;
 
-  Map<String, String?> _errorMessage = {
+  final Map<String, String?> _errorMessage = {
     "full_name": null,
     "email": null,
     "phone": null,
@@ -67,6 +67,19 @@ class _AddInternPageState extends State<AddInternPage> {
 
   bool _checkForEmptyFields() {
     var size = _controllerstate.length;
+    _controllerstate = {
+      "full_name": _nameC.text,
+      "email": _mailC.text,
+      "phone": _phoneC.text,
+      "address": _addrC.text,
+      "ref": _refC.text,
+      "id": _idC.text,
+      "start_date": _startDate.toString(),
+      "end_date": _endDate.toString(),
+      "division": _division,
+      "department": _department,
+      "supervisor": _supervisors.toString(),
+    };
     _controllerstate.forEach((key, value) {
       if (value == null ||
           value.isEmpty ||
@@ -81,6 +94,7 @@ class _AddInternPageState extends State<AddInternPage> {
       }
       ;
     });
+
     return size == _controllerstate.length;
   }
 
@@ -156,8 +170,11 @@ class _AddInternPageState extends State<AddInternPage> {
                     errorText: _errorMessage["division"],
                     hint: 'Division',
                     value: _division,
-                    items: ['Design', 'Development', 'Marketing'],
-                    onChanged: (v) => setState(() => _division = v),
+                    items: const ['Design', 'Development', 'Marketing'],
+                    onChanged: (v) => setState(() {
+                      _division = v;
+                      _errorMessage["division"] = null;
+                    }),
                   ),
                 ),
                 const SizedBox(width: 24),
@@ -166,8 +183,12 @@ class _AddInternPageState extends State<AddInternPage> {
                     errorText: _errorMessage["department"],
                     hint: 'Department',
                     value: _department,
-                    items: ['IT', 'HR', 'Finance', 'Marketing'],
-                    onChanged: (v) => setState(() => _department = v),
+                    items: const ['IT', 'HR', 'Finance', 'Marketing'],
+                    onChanged: (v) => setState(() {
+                      _department = v;
+
+                      _errorMessage["department"] = null;
+                    }),
                   ),
                 ),
               ],
@@ -227,11 +248,23 @@ class _AddInternPageState extends State<AddInternPage> {
             ),
             const SizedBox(width: 24),
             MyButton(
-              text: "reject",
-              iconAsset: Icons.close_rounded,
-              backgroundColor: Colors.red,
-              borderColor: darkRed,
-            ),
+                text: "reject",
+                iconAsset: Icons.close_rounded,
+                backgroundColor: Colors.red,
+                borderColor: darkRed,
+                onPressed: () {
+                  if (_nameC.text.isNotEmpty && _mailC.text.isNotEmpty) {
+                    print("rejected");
+                    controller.rejectInternEmail(
+                        context, _nameC.text, _mailC.text);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content:
+                          Text("Please fill at least name and email fields"),
+                      backgroundColor: Colors.red,
+                    ));
+                  }
+                }),
           ])),
           _gap(),
         ],
