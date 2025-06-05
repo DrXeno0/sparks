@@ -2,6 +2,7 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sparks/model/intern.dart' as intern;
 import 'package:sparks/model/intern_entity.dart';
+import 'package:sparks/model/supervisor.dart' as supervisor;
 import 'package:sparks/model/supervisor_entity.dart';
 
 class DatabaseRepository {
@@ -104,6 +105,37 @@ class DatabaseRepository {
         .findAll();
 
     return internEntities.map((e) => e.toIntern()).toList();
+  }
+
+  Future<void> insertSupervisor(supervisor.Supervisor supervisor) async {
+    final supervisorEntity = supervisor.toEntity();
+    await db.writeTxn(() async {
+      await db.supervisors.put(supervisorEntity);
+    });
+  }
+
+  Future<void> updateSupervisor(supervisor.Supervisor supervisor) async {
+    final supervisorEntity = supervisor.toEntity();
+    await db.writeTxn(() async {
+      await db.supervisors.put(supervisorEntity);
+    });
+  }
+
+  Future<void> deleteSupervisor(supervisor.Supervisor supervisor) async {
+    final supervisorEntity = supervisor.toEntity();
+    await db.writeTxn(() async {
+      await db.supervisors.delete(supervisorEntity.id);
+    });
+  }
+
+  Future<List<supervisor.Supervisor>> getAllSupervisors() async {
+    final supervisorEntities = await db.supervisors.where().findAll();
+    return supervisorEntities.map((e) => e.toSupervisor()).toList();
+  }
+
+  Future<supervisor.Supervisor?> getSupervisorById(String id) async {
+    final supervisorEntity = await db.supervisors.get(id as Id);
+    return supervisorEntity?.toSupervisor();
   }
 
   Future<void> close() async {

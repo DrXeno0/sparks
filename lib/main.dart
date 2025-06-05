@@ -10,18 +10,19 @@ import 'package:sparks/view/screens/splash_screen.dart';
 import 'package:sparks/view/theme.dart';
 import 'package:window_manager/window_manager.dart';
 
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-const WindowsInitializationSettings initializationSettingsWindows =
-    WindowsInitializationSettings(
-        appName: 'sparks',
-        appUserModelId: 'nocturnal.sparks',
-        guid: 'a6a14840-4e3d-438a-b762-1db02dc2b189');
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   DatabaseRepository().init();
   if (Platform.isWindows) {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+    const WindowsInitializationSettings initializationSettingsWindows =
+    WindowsInitializationSettings(
+        appName: 'sparks',
+        appUserModelId: 'nocturnal.sparks',
+        guid: 'a6a14840-4e3d-438a-b762-1db02dc2b189');
     await windowManager.ensureInitialized();
     const InitializationSettings initializationSettings =
         InitializationSettings(windows: initializationSettingsWindows);
@@ -86,8 +87,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void switchScreen() {
     setState(() {
-      screen = _ScreenHost();
+      screen = Platform.isWindows ? _ScreenHost() : _MobileScreenHost();
     });
+  }
+
+  Widget _MobileScreenHost() {
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+        colors: [Colors.white, white90],
+        stops: const [0, 1],
+        begin: const Alignment(0, 0),
+        end: const Alignment(1, 1),
+      )),
+      child: Center(
+        child: Text("Mobile Screen"),
+      ),
+    );
   }
 
   Widget _ScreenHost() {

@@ -77,7 +77,6 @@ class SupervisorProfilePage extends StatelessWidget {
             /* ── details table ─────────────────────────── */
             SupervisorInfoTable(
               supervisor: Supervisor(
-                id: 'sup-001',
                 name: profile.name,
                 role: 'Role N/A',
                 department: 'Department N/A',
@@ -86,6 +85,9 @@ class SupervisorProfilePage extends StatelessWidget {
                 email: 'N/A',
                 address: 'N/A',
                 supervisedInterns: const [34, 45, 2],
+                division: '',
+                cin: '',
+                gender: Gender.female,
               ),
             ),
           ],

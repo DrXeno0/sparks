@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sparks/controller/supervisor_forum_controller.dart';
 import 'package:sparks/model/gender.dart';
+import 'package:sparks/model/supervisor.dart';
+import 'package:sparks/view/components/date_input_field.dart';
 import 'package:sparks/view/components/gender_selector.dart';
 import 'package:sparks/view/components/my_custom_button.dart';
 import 'package:sparks/view/components/rounded_dropdown.dart';
@@ -13,6 +16,8 @@ class AddSupervisorPage extends StatefulWidget {
 }
 
 class _AddSupervisorPageState extends State<AddSupervisorPage> {
+  final _controller = SupervisorForumController();
+
   double kFieldMaxWidth = 400;
 
 /* ── controllers & state ─────────────────────────────────── */
@@ -20,6 +25,8 @@ class _AddSupervisorPageState extends State<AddSupervisorPage> {
   final _mailC = TextEditingController();
   final _phoneC = TextEditingController();
   final _addrC = TextEditingController();
+  final _roleC = TextEditingController();
+  DateTime? _startDate;
 
   final _idC = TextEditingController();
 
@@ -33,6 +40,10 @@ class _AddSupervisorPageState extends State<AddSupervisorPage> {
     "phone": null,
     "address": null,
     "id": null,
+    "role": null,
+    "start_date": null,
+    "division": null,
+    "department": null,
   };
 
   bool _checkForEmptyFields() {
@@ -42,6 +53,10 @@ class _AddSupervisorPageState extends State<AddSupervisorPage> {
       "phone": _phoneC.text,
       "address": _addrC.text,
       "id": _idC.text,
+      "role": _roleC.text,
+      "start_date": _startDate.toString(),
+      "division": _division,
+      "department": _department,
     };
     var size = _controllerstate.length;
     for (var key in _controllerstate.keys) {
@@ -76,17 +91,42 @@ class _AddSupervisorPageState extends State<AddSupervisorPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _gap(6),
+          _constrained(RoundedInputField(
+              hint: 'Full Name',
+              controller: _nameC,
+              errorText: _errorMessage["full_name"])),
+          _gap(),
+          _constrained(RoundedInputField(
+              hint: 'Email',
+              controller: _mailC,
+              errorText: _errorMessage["email"])),
+          _gap(),
+          _constrained(RoundedInputField(
+              hint: 'Phone Number',
+              controller: _phoneC,
+              errorText: _errorMessage["phone"])),
+          _gap(),
+          _constrained(RoundedInputField(
+              hint: 'Address',
+              controller: _addrC,
+              errorText: _errorMessage["address"])),
+          _gap(),
+          _constrained(RoundedInputField(
+              hint: 'ID', controller: _idC, errorText: _errorMessage["id"])),
+          _gap(),
+          _constrained(RoundedInputField(
+              hint: "Role",
+              controller: _roleC,
+              errorText: _errorMessage["role"])),
+          _gap(),
           _constrained(
-              RoundedInputField(hint: 'Full Name', controller: _nameC)),
-          _gap(),
-          _constrained(RoundedInputField(hint: 'Email', controller: _mailC)),
-          _gap(),
-          _constrained(
-              RoundedInputField(hint: 'Phone Number', controller: _phoneC)),
-          _gap(),
-          _constrained(RoundedInputField(hint: 'Address', controller: _addrC)),
-          _gap(),
-          _constrained(RoundedInputField(hint: 'ID', controller: _idC)),
+            RoundedDateInputField(
+              errorText: _errorMessage["start_date"],
+              hint: 'Start Date',
+              initialDate: DateTime.now(),
+              onChanged: (d) => setState(() => _startDate = d),
+            ),
+          ),
           _gap(),
           _constrained(
             Row(
@@ -118,8 +158,32 @@ class _AddSupervisorPageState extends State<AddSupervisorPage> {
           ),
           _gap(),
           _constrained(Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [MyButton(text: "add", iconAsset: Icons.add_rounded)])),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MyButton(
+                  text: "add",
+                  iconAsset: Icons.add_rounded,
+                  onPressed: () {
+                    if (_checkForEmptyFields()) {
+                      _controller.addSupervisor(
+                          context,
+                          Supervisor(
+                            name: _nameC.text,
+                            role: _roleC.text,
+                            department: _department!,
+                            division: _division!,
+                            cin: _idC.text,
+                            gender: _gender!,
+                            startDate: _startDate!,
+                            phone: _phoneC.text,
+                            email: _mailC.text,
+                            address: _addrC.text,
+                            supervisedInterns: [],
+                          ));
+                    }
+                  })
+            ],
+          )),
           _gap(),
         ],
       );
